@@ -25,7 +25,11 @@ const userSchema = new Schema(
             type: String,
             required: [true, 'Please provide a password'], // Validation: password is required
             minlength: [7, 'The minimum password length is 7'] // Minimum password length
-        }
+        }, role: {
+            type: String,
+            enum: ["user", "admin"], // default roles
+            default: "user",
+        },
     },
     { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
@@ -46,7 +50,7 @@ userSchema.methods.comparePassword = async function (userPassword) {
 // Method to generate JWT token for authentication
 userSchema.methods.generateToken = function () {
     return jwt.sign(
-        { userId: this._id, name: this.name }, // Payload
+        { userId: this._id, name: this.name, role: this.role }, // Payload
         process.env.jwt_secret, // Secret key from .env
         { expiresIn: '1d' } // Token expiration
     );

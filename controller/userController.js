@@ -48,7 +48,7 @@ const login = async (req, res) => {
         // 5. Send success response with basic user details and token
         res.status(200).json({
             succcess: true,
-            user: { userExist: userExist.name, email: userExist.email },
+            user: { userExist: userExist.name, email: userExist.email, role: userExist.role },
             token
         });
 
